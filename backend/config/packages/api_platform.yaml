@@ -1,0 +1,13 @@
+api_platform:
+    title: Hello API Platform
+    version: 1.0.0
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+        pagination_maximum_items_per_page: 100
+    collection:
+        pagination:
+            enabled: true
+            items_per_page_parameter_name: 'itemsPerPage'
+            page_parameter_name: 'page'
