@@ -17,6 +17,5 @@ if [[ -n "$DEFAULT_USERNAME" && -n "$DEFAULT_PASSWORD" ]]; then
   php bin/console app:create-user "$DEFAULT_USERNAME" "$DEFAULT_PASSWORD" "ROLE_ADMIN" || true
 fi
 
-# Start PHP-FPM
-exec php-fpm
-
+# Start supervisord (to run php-fpm and nginx)
+exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

@@ -11,14 +11,10 @@ RUN npm run build
 # Symfony build stage
 FROM php:8.3-fpm
 
-# Install system dependencies
+# Install system dependencies, including nginx and supervisor
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libsqlite3-dev \
-    unzip \
-    git \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libsqlite3-dev unzip git nginx supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_sqlite
 
@@ -29,15 +25,19 @@ ENV APP_ENV=$APP_ENV
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Set working directory
+# Set working directory for Symfony backend
 WORKDIR /var/www/backend
 
-# Copy backend (Symfony) app
-COPY ./backend ./ 
+# Copy the Symfony backend files
+COPY ./backend ./
 
 # Copy built React frontend to Symfony public directory
 COPY --from=react-build /app/dist ./public/
 
+# Copy nginx configuration
+COPY ./backend/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Setup the DB directory and file
 RUN mkdir -p var/db && \
     touch var/db/data.db && \
     chown -R www-data:www-data var/db && \
@@ -49,18 +49,18 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Fix permissions
 RUN chown -R www-data:www-data var
 
-# Expose the port that Nginx will be listening on (port 80)
-EXPOSE 80
-
 # Copy entrypoint script
 COPY ./backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
-# Make it executable
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Set the entrypoint
+# Copy Supervisor configuration to run PHP-FPM and Nginx
+COPY ./backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Expose port 80 for Nginx
+EXPOSE 80
+
+# Set entrypoint to the custom script
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# Set the default command to run PHP-FPM
-CMD ["php-fpm"]
-
+# Default command to run supervisord (to manage both PHP-FPM and Nginx)
+CMD ["supervisord", "-n"]
