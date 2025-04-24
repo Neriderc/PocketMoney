@@ -35,7 +35,7 @@ COPY ./backend ./
 COPY --from=react-build /app/dist ./public/
 
 # Copy nginx configuration
-COPY ./backend/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Setup the DB directory and file
 RUN mkdir -p var/db && \
