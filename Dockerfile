@@ -54,8 +54,8 @@ RUN if [ "$APP_ENV" = "dev" ]; then \
 RUN chown -R www-data:www-data var
 
 # Copy entrypoint script
-COPY ./backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY ./backend/docker-entrypoint.sh docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
 
 # Copy Supervisor configuration to run PHP-FPM and Nginx
 COPY ./backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -64,7 +64,7 @@ COPY ./backend/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 80
 
 # Set entrypoint to the custom script
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/var/www/backend/docker-entrypoint.sh"]
 
 # Default command to run supervisord (to manage both PHP-FPM and Nginx)
 CMD ["supervisord", "-n"]
