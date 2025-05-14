@@ -21,12 +21,11 @@ export const getTextColourFromBrightness = (colour) => {
 
 let isRefreshing = false;
 let refreshPromise = null;
-let domain = "http://localhost:8000";
 
 export async function apiFetch(apiResourcePath, logoutCallback, options = {}) {
     let token = localStorage.getItem("access_token");
 
-    const response = await fetch(domain + "/api/" + apiResourcePath, {
+    const response = await fetch("api/" + apiResourcePath, {
         ...options,
         headers: {
             ...options.headers,
