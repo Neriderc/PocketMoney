@@ -15,8 +15,6 @@ export const AppProvider = ({ children }) => {
     const [authChecked, setAuthChecked] = useState(false);
     const navigate = useNavigate();
 
-    const API_BASE_URL = "http://localhost:8000/api";
-
     const isAdmin = () => {
         return user?.roles?.includes("ROLE_ADMIN");
     };
@@ -30,15 +28,12 @@ export const AppProvider = ({ children }) => {
     };
 
     const login = async (credentials) => {
-        const response = await axios.post(
-            `${API_BASE_URL}/login_check`,
-            credentials,
-        );
+        const response = await axios.post("login_check", credentials);
 
         const token = response.data.token;
         localStorage.setItem("access_token", token);
 
-        const userResponse = await axios.get(`${API_BASE_URL}/users/me`, {
+        const userResponse = await axios.get("users/me", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
