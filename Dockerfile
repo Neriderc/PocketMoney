@@ -34,6 +34,9 @@ COPY ./backend ./
 # Copy built React frontend to Symfony public directory
 COPY --from=react-build /app/dist ./public/
 
+# Delete default nginx config
+RUN rm /etc/nginx/sites-enabled/default || true
+
 # Copy nginx configuration
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
