@@ -36,12 +36,10 @@ export default function CreateUserPage() {
     }, []);
 
     const handleSubmit = (e) => {
-        console.log(1);
         e.preventDefault();
         setIsSubmitting(true);
         setMessage("");
         setMessageType("");
-        console.log(2);
         const payload = {
             username,
             email,
@@ -49,7 +47,6 @@ export default function CreateUserPage() {
             roles,
             households: selectedHouseholds,
         };
-        console.log(3);
         apiFetch("users", {
             method: "POST",
             headers: {
@@ -58,10 +55,7 @@ export default function CreateUserPage() {
             body: JSON.stringify(payload),
         })
             .then(async (res) => {
-                console.log(4);
-                console.log(res);
                 if (!res.ok) {
-                    console.log(6);
                     const errorData = await res.json();
                     throw new Error(
                         errorData["description"] || "User creation failed.",
@@ -70,17 +64,14 @@ export default function CreateUserPage() {
                 return res.json();
             })
             .then(() => {
-                console.log(5);
-                //navigate("/settings");
+                navigate("/settings");
             })
             .catch((error) => {
-                console.log(7);
                 console.error("Error creating user:", error);
                 setMessage(error.message || "An error occurred.");
                 setMessageType("danger");
                 setIsSubmitting(false);
             });
-        console.log(8);
     };
 
     return (
