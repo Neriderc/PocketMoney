@@ -12,9 +12,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (activeHousehold) {
-            apiFetch(`households/${activeHousehold.id}/children`, logout, {
-                method: "GET",
-            })
+            apiFetch(`households/${activeHousehold.id}/children`)
                 .then((response) => {
                     return response.json();
                 })
@@ -24,9 +22,7 @@ export default function Dashboard() {
                         setChildren(childrenData);
 
                         childrenData.forEach((child) => {
-                            apiFetch(`children/${child.id}/accounts`, logout, {
-                                method: "GET",
-                            })
+                            apiFetch(`children/${child.id}/accounts`)
                                 .then((response) => {
                                     return response.json();
                                 })

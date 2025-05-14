@@ -18,9 +18,7 @@ export default function EditChildPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`children/${childId}`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}`)
             .then((response) => response.json())
             .then((data) => {
                 setChild(data);
@@ -33,9 +31,7 @@ export default function EditChildPage() {
                 console.error("Error fetching child data:", error),
             );
 
-        apiFetch(`children/${childId}/accounts`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}/accounts`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.member && Array.isArray(data.member)) {
@@ -56,7 +52,7 @@ export default function EditChildPage() {
             dateOfBirth: newDateOfBirth || null,
         };
 
-        apiFetch(`children/${childId}`, logout, {
+        apiFetch(`children/${childId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/merge-patch+json",
@@ -84,7 +80,7 @@ export default function EditChildPage() {
     };
 
     const handleDeleteChild = () => {
-        apiFetch(`children/${childId}`, logout, {
+        apiFetch(`children/${childId}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -104,7 +100,7 @@ export default function EditChildPage() {
     const handleDeleteAccount = (accountUrl) => {
         const accountId = accountUrl.split("/").pop();
 
-        apiFetch(`children/${childId}/accounts/${accountId}`, logout, {
+        apiFetch(`children/${childId}/accounts/${accountId}`, {
             method: "DELETE",
         })
             .then((response) => {

@@ -15,7 +15,7 @@ export default function CreateUserPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
-    const { apiFetch, logout } = useAppContext();
+    const { apiFetch } = useAppContext();
 
     const allRoles = [
         { value: "ROLE_USER", label: "User" },
@@ -23,7 +23,7 @@ export default function CreateUserPage() {
     ];
 
     useEffect(() => {
-        apiFetch("households", logout)
+        apiFetch("households")
             .then((res) => res.json())
             .then((data) => {
                 setHouseholds(data.member || []);
@@ -36,11 +36,12 @@ export default function CreateUserPage() {
     }, []);
 
     const handleSubmit = (e) => {
+        console.log(1);
         e.preventDefault();
         setIsSubmitting(true);
         setMessage("");
         setMessageType("");
-
+        console.log(2);
         const payload = {
             username,
             email,
@@ -48,8 +49,8 @@ export default function CreateUserPage() {
             roles,
             households: selectedHouseholds,
         };
-
-        apiFetch("users", logout, {
+        console.log(3);
+        apiFetch("users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",
@@ -57,7 +58,10 @@ export default function CreateUserPage() {
             body: JSON.stringify(payload),
         })
             .then(async (res) => {
+                console.log(4);
+                console.log(res);
                 if (!res.ok) {
+                    console.log(6);
                     const errorData = await res.json();
                     throw new Error(
                         errorData["description"] || "User creation failed.",
@@ -66,14 +70,17 @@ export default function CreateUserPage() {
                 return res.json();
             })
             .then(() => {
-                navigate("/settings");
+                console.log(5);
+                //navigate("/settings");
             })
             .catch((error) => {
+                console.log(7);
                 console.error("Error creating user:", error);
                 setMessage(error.message || "An error occurred.");
                 setMessageType("danger");
                 setIsSubmitting(false);
             });
+        console.log(8);
     };
 
     return (

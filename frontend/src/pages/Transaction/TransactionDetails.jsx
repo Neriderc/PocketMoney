@@ -13,7 +13,6 @@ export default function TransactionDetailsPage() {
     useEffect(() => {
         apiFetch(
             `accounts/${accountId}/transactions/${transactionId}`,
-            logout,
             {
                 method: "GET",
             },

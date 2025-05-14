@@ -26,7 +26,7 @@ export const AppProvider = ({ children }) => {
     };
 
     const apiFetch = (endpoint, options = {}) => {
-        return rawApiFetch(endpoint, options, logout);
+        return rawApiFetch(endpoint, logout, options);
     };
 
     const login = async (credentials) => {
@@ -66,7 +66,7 @@ export const AppProvider = ({ children }) => {
         const token = localStorage.getItem("access_token");
         if (token && !authChecked) {
             console.log(token);
-            apiFetch("users/me", logout)
+            apiFetch("users/me")
                 .then((response) => response.json())
                 .then((data) => {
                     setUser(data);

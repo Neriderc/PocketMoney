@@ -24,7 +24,7 @@ export default function CreateScheduledTransactionPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`children/${childId}/accounts`, logout)
+        apiFetch(`children/${childId}/accounts`)
             .then((response) => response.json())
             .then((data) => {
                 const child = data["member"]?.[0];
@@ -52,7 +52,7 @@ export default function CreateScheduledTransactionPage() {
         setMessage("");
         setMessageType("");
 
-        apiFetch(`children/${childId}/scheduled_transactions`, logout, {
+        apiFetch(`children/${childId}/scheduled_transactions`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

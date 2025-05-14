@@ -22,7 +22,7 @@ export default function EditScheduledTransactionPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`children/${childId}/accounts`, logout)
+        apiFetch(`children/${childId}/accounts`)
             .then((response) => response.json())
             .then((data) => {
                 const child = data["member"]?.[0];
@@ -34,10 +34,7 @@ export default function EditScheduledTransactionPage() {
                 setMessageType("danger");
             });
 
-        apiFetch(
-            `children/${childId}/scheduled_transactions/${scheduledTransactionId}`,
-            logout,
-        )
+        apiFetch(`children/${childId}/scheduled_transactions/${scheduledTransactionId}`)
             .then((response) => response.json())
             .then((data) => {
                 setAmount(data.amount);
@@ -65,7 +62,6 @@ export default function EditScheduledTransactionPage() {
 
         apiFetch(
             `children/${childId}/scheduled_transactions/${scheduledTransactionId}`,
-            logout,
             {
                 method: "PATCH",
                 headers: {
@@ -105,7 +101,6 @@ export default function EditScheduledTransactionPage() {
     const handleDelete = () => {
         apiFetch(
             `children/${childId}/scheduled_transactions/${scheduledTransactionId}`,
-            logout,
             {
                 method: "DELETE",
             },

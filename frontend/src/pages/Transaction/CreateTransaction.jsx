@@ -28,7 +28,7 @@ export default function CreateTransactionPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
         setIsSubmitting(true);
-        apiFetch(`accounts/${accountId}/transactions`, logout, {
+        apiFetch(`accounts/${accountId}/transactions`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

@@ -44,7 +44,11 @@ RUN mkdir -p var/db && \
     chmod -R 775 var/db
 
 # Install Symfony dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN if [ "$APP_ENV" = "dev" ]; then \
+        composer install --no-interaction; \
+    else \
+        composer install --no-dev --optimize-autoloader --no-interaction; \
+    fi
 
 # Fix permissions
 RUN chown -R www-data:www-data var
