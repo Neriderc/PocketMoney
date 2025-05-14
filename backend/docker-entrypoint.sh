@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Running entrypoint script..."
+
 set -e
 
 # Ensure the DB file exists for SQLite
@@ -9,8 +11,18 @@ touch var/db/data.db
 chown -R www-data:www-data var/db
 chmod 664 var/db/data.db
 
-# Run migrations 
+# Set CORS from domain declared in docker environment variable
+if [ -n "$DOMAIN" ]; then
+  export CORS_ALLOW_ORIGIN="^https?://(.+\.)?${DOMAIN//./\\.}(:[0-9]+)?$"
+  echo "CORS_ALLOW_ORIGIN set to $CORS_ALLOW_ORIGIN"
+fi
+
+# Run migrations
+echo "Running migrations"
 php bin/console doctrine:migrations:migrate --no-interaction
+
+php bin/console cache:clear
+php bin/console cache:warmup
 
 # Optional: create default user
 if [[ -n "$DEFAULT_USERNAME" && -n "$DEFAULT_PASSWORD" ]]; then
