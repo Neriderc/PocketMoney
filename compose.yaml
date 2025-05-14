@@ -11,3 +11,4 @@ services:
       DATABASE_URL: sqlite:///%kernel.project_dir%/var/db/data.db
       DEFAULT_USERNAME: admin
       DEFAULT_PASSWORD: changeme
+      DOMAIN: example.com
