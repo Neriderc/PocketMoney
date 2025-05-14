@@ -13,9 +13,7 @@ export default function HouseholdDetailsPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`households/${householdId}`, logout, {
-            method: "GET",
-        })
+        apiFetch(`households/${householdId}`)
             .then((response) => {
                 return response.json();
             })
@@ -26,9 +24,7 @@ export default function HouseholdDetailsPage() {
                 console.error("Error fetching household details:", error),
             );
 
-        apiFetch(`households/${householdId}/children`, logout, {
-            method: "GET",
-        })
+        apiFetch(`households/${householdId}/children`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.member && Array.isArray(data.member)) {

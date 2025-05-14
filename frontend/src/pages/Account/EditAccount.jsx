@@ -45,7 +45,7 @@ export default function EditAccountPage() {
             return;
         }
 
-        apiFetch(`children/${childId}/accounts/${accountId}`, logout, {
+        apiFetch(`children/${childId}/accounts/${accountId}`, {
             method: "GET",
         })
             .then((response) => {
@@ -89,7 +89,7 @@ export default function EditAccountPage() {
             color: newColor,
         };
 
-        apiFetch(`children/${childId}/accounts/${accountId}`, logout, {
+        apiFetch(`children/${childId}/accounts/${accountId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/merge-patch+json",
@@ -113,7 +113,7 @@ export default function EditAccountPage() {
 
     const handleDeleteAccount = () => {
         const token = localStorage.getItem("access_token");
-        apiFetch(`children/${childId}/accounts/${accountId}`, logout, {
+        apiFetch(`children/${childId}/accounts/${accountId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,

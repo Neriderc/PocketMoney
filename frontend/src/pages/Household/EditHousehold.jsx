@@ -15,9 +15,7 @@ export default function EditHouseholdPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`households/${householdId}`, logout, {
-            method: "GET",
-        })
+        apiFetch(`households/${householdId}`)
             .then((response) => {
                 return response.json();
             })
@@ -37,7 +35,7 @@ export default function EditHouseholdPage() {
             description: newDescription,
         };
 
-        apiFetch(`households/${householdId}`, logout, {
+        apiFetch(`households/${householdId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/merge-patch+json",
@@ -60,7 +58,7 @@ export default function EditHouseholdPage() {
     };
 
     const handleDeleteHousehold = () => {
-        apiFetch(`households/${householdId}`, logout, {
+        apiFetch(`households/${householdId}`, {
             method: "DELETE",
         })
             .then((response) => {

@@ -13,7 +13,7 @@ export default function SettingsPage() {
     const [defaultHousehold, setDefaultHousehold] = useState(null);
 
     useEffect(() => {
-        apiFetch("households", logout)
+        apiFetch("households")
             .then((response) => response.json())
             .then((data) => {
                 if (data.member && Array.isArray(data.member)) {
@@ -25,7 +25,7 @@ export default function SettingsPage() {
             );
 
         if (isAdmin()) {
-            apiFetch("users", logout)
+            apiFetch("users")
                 .then((response) => response.json())
                 .then((usersData) => {
                     if (usersData.member && Array.isArray(usersData.member)) {
@@ -51,7 +51,7 @@ export default function SettingsPage() {
     const handleBackToDashboard = () => navigate("/dashboard");
 
     const handleDefaultHouseholdChange = (householdId) => {
-        apiFetch("users/me", logout, {
+        apiFetch("users/me", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ defaultHouseholdId: householdId }),

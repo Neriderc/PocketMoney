@@ -11,13 +11,7 @@ export default function SchedulesTransactionDetailsPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(
-            `children/${childId}/scheduled_transactions/${scheduledTransactionId}`,
-            logout,
-            {
-                method: "GET",
-            },
-        )
+        apiFetch(`children/${childId}/scheduled_transactions/${scheduledTransactionId}`)
             .then((response) => response.json())
             .then((data) => {
                 setSchedule(data);

@@ -24,7 +24,7 @@ export default function EditUserPage() {
     ];
 
     useEffect(() => {
-        apiFetch("households", logout)
+        apiFetch("households")
             .then((res) => res.json())
             .then((data) => setHouseholds(data.member || []))
             .catch((err) => {
@@ -33,7 +33,7 @@ export default function EditUserPage() {
                 setMessageType("danger");
             });
 
-        apiFetch(`users/${userId}`, logout)
+        apiFetch(`users/${userId}`)
             .then((res) => res.json())
             .then((data) => {
                 setUsername(data.username);
@@ -64,7 +64,7 @@ export default function EditUserPage() {
             validHouseholdIds.includes(id),
         );
 
-        apiFetch(`users/${userId}`, logout, {
+        apiFetch(`users/${userId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/merge-patch+json",
@@ -97,7 +97,7 @@ export default function EditUserPage() {
     };
 
     const handleDelete = () => {
-        apiFetch(`users/${userId}`, logout, {
+        apiFetch(`users/${userId}`, {
             method: "DELETE",
         })
             .then((response) => {

@@ -64,7 +64,7 @@ export default function AccountCreatePage() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        apiFetch(`children/${childId}/accounts`, logout, {
+        apiFetch(`children/${childId}/accounts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

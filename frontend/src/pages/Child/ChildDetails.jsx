@@ -19,9 +19,7 @@ export default function ChildPage() {
             return;
         }
 
-        apiFetch(`children/${childId}`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}`)
             .then((response) => {
                 return response.json();
             })
@@ -32,9 +30,7 @@ export default function ChildPage() {
                 console.error("Error fetching child data:", error),
             );
 
-        apiFetch(`children/${childId}/accounts`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}/accounts`)
             .then((response) => {
                 return response.json();
             })
@@ -49,9 +45,7 @@ export default function ChildPage() {
             .catch((error) =>
                 console.error("Error fetching accounts data:", error),
             );
-        apiFetch(`children/${childId}/scheduled_transactions`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}/scheduled_transactions`)
             .then((response) => response.json())
             .then((data) => setTransactionSchedules(data["member"]))
             .catch((error) =>

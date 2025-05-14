@@ -17,7 +17,7 @@ export default function NavBar() {
 
         const fetchHouseholds = async () => {
             try {
-                const response = await apiFetch("households", logout, {
+                const response = await apiFetch("households", {
                     method: "GET",
                 });
                 const data = await response.json();

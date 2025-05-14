@@ -20,7 +20,7 @@ export default function HouseholdCreatePage() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        apiFetch("households", logout, {
+        apiFetch("households", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

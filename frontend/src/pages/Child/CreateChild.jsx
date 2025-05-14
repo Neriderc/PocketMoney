@@ -21,7 +21,7 @@ export default function ChildCreatePage() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        apiFetch(`households/${householdId}/children`, logout, {
+        apiFetch(`households/${householdId}/children`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

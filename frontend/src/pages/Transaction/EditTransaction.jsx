@@ -18,11 +18,7 @@ export default function EditTransactionPage() {
 
     useEffect(() => {
         apiFetch(
-            `accounts/${accountId}/transactions/${transactionId}`,
-            logout,
-            {
-                method: "GET",
-            },
+            `accounts/${accountId}/transactions/${transactionId}`
         )
             .then((response) => response.json())
             .then((data) => {
@@ -51,7 +47,6 @@ export default function EditTransactionPage() {
 
         apiFetch(
             `accounts/${accountId}/transactions/${transactionId}`,
-            logout,
             {
                 method: "PATCH",
                 headers: {
@@ -78,7 +73,6 @@ export default function EditTransactionPage() {
     const handleDeleteTransaction = () => {
         apiFetch(
             `accounts/${accountId}/transactions/${transactionId}`,
-            logout,
             {
                 method: "DELETE",
             },

@@ -11,7 +11,7 @@ export default function UserDetailsPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        apiFetch(`users/${userId}`, logout, {
+        apiFetch(`users/${userId}`, {
             method: "GET",
         })
             .then((response) => response.json())

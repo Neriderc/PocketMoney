@@ -22,9 +22,7 @@ export default function AccountTransactionsPage() {
             return;
         }
 
-        apiFetch(`children/${childId}/accounts/${accountId}`, logout, {
-            method: "GET",
-        })
+        apiFetch(`children/${childId}/accounts/${accountId}`)
             .then((response) => {
                 return response.json();
             })
@@ -35,13 +33,7 @@ export default function AccountTransactionsPage() {
                 console.error("Error fetching account details:", error);
             });
 
-        apiFetch(
-            `accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`,
-            logout,
-            {
-                method: "GET",
-            },
-        )
+        apiFetch(`accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`)
             .then((response) => {
                 return response.json();
             })
