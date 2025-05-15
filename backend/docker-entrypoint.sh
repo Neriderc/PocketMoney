@@ -13,8 +13,8 @@ chmod 664 var/db/data.db
 
 # Set CORS from domain declared in docker environment variable
 if [ -n "$DOMAIN" ]; then
-  export CORS_ALLOW_ORIGIN="^https?://(.+\.)?${DOMAIN//./\\.}(:[0-9]+)?$"
-  echo "CORS_ALLOW_ORIGIN set to $CORS_ALLOW_ORIGIN"
+  echo "CORS_ALLOW_ORIGIN=\"^https?://(.+\.)?${DOMAIN//./\\.}(:[0-9]+)?$\"" >> .env.local
+  echo "CORS_ALLOW_ORIGIN set to $CORS_ALLOW_ORIGIN in .env.local"
 fi
 
 # Run migrations
