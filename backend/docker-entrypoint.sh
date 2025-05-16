@@ -17,6 +17,23 @@ if [ -n "$DOMAIN" ]; then
   echo "CORS_ALLOW_ORIGIN set to $CORS_ALLOW_ORIGIN"
 fi
 
+# Generate JWT keys if they don't exist
+JWT_DIR="config/jwt"
+PRIVATE_KEY="$JWT_DIR/private.pem"
+PUBLIC_KEY="$JWT_DIR/public.pem"
+
+if [ ! -f "$PRIVATE_KEY" ] || [ ! -f "$PUBLIC_KEY" ]; then
+  echo "Generating JWT keys..."
+  mkdir -p "$JWT_DIR"
+  openssl genrsa -out "$PRIVATE_KEY" 4096
+  openssl rsa -pubout -in "$PRIVATE_KEY" -out "$PUBLIC_KEY"
+  chown -R www-data:www-data "$JWT_DIR"
+  chmod 600 "$PRIVATE_KEY"
+  chmod 644 "$PUBLIC_KEY"
+else
+  echo "Found JWT keys"
+fi
+
 # Run migrations
 echo "Running migrations"
 php bin/console doctrine:migrations:migrate --no-interaction
