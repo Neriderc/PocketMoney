@@ -56,9 +56,10 @@ class AddChildController extends AbstractController
         }
 
         $childName = $data['name'];
-
+        $dateOfBirth = $data['dateOfBirth'];
         try {
             $child = $this->householdService->addChildToHousehold($householdId, $childName);
+            $child->setDateOfBirth($dateOfBirth);
         } catch (\Exception $e) {
             throw new BadRequestHttpException('Error: ' . $e->getMessage());
         }

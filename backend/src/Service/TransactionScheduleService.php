@@ -86,6 +86,7 @@ class TransactionScheduleService
 
         while ($transactionSchedule->getNextExecutionDate() <= $now) {
             $accounts = $transactionSchedule->getAccounts();
+            $AmountBase = $transactionSchedule->getAmountBase();
             $numAccounts = $accounts->count();
 
             if ($numAccounts === 0) {
@@ -93,6 +94,13 @@ class TransactionScheduleService
             }
 
             $totalAmount = $transactionSchedule->getAmount();
+
+            // If based on age, the amount is multiplied by the child's age
+            if ($AmountBase == AmountBase::AGE) {
+                $child = $transactionSchedule->getChild();
+                $age = $child->getDateOfBirth()->diff($transactionSchedule->getNextExecutionDate())->y;
+                $totalAmount *= $age;
+            }
             $splitAmount = $totalAmount / $numAccounts;
 
             foreach ($accounts as $account) {
