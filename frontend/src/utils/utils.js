@@ -25,7 +25,7 @@ let refreshPromise = null;
 export async function apiFetch(apiResourcePath, logoutCallback, options = {}) {
     let token = localStorage.getItem("access_token");
 
-    const response = await fetch("api/" + apiResourcePath, {
+    const response = await fetch("/api/" + apiResourcePath, {
         ...options,
         headers: {
             ...options.headers,
