@@ -57,8 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Username cannot be blank")]
     #[Assert\Length(min: 1, max: 180)]
     #[Assert\Regex(
-        pattern: '/^[\p{L} \'-]+$/u',
-        message: "Username can only contain letters, spaces, hyphens, and apostrophes"
+        pattern: '/^[\p{L}0-9 \'-]+$/u',
+        message: "Name can only contain letters, numbers, spaces, hyphens, and apostrophes"
     )]
     private ?string $username = null;
 

@@ -34,7 +34,9 @@ export default function EditScheduledTransactionPage() {
                 setMessageType("danger");
             });
 
-        apiFetch(`children/${childId}/scheduled_transactions/${scheduledTransactionId}`)
+        apiFetch(
+            `children/${childId}/scheduled_transactions/${scheduledTransactionId}`,
+        )
             .then((response) => response.json())
             .then((data) => {
                 setAmount(data.amount);
@@ -42,7 +44,7 @@ export default function EditScheduledTransactionPage() {
                 setNextTransactionDate(data.nextExecutionDate.slice(0, 10));
                 setRepeatFrequency(data.repeatFrequency);
                 setComment(data.comment);
-                setAmountCalculation(data.amountCalculation);
+                setAmountCalculation(data.amountBase);
                 setSelectedAccounts(
                     data.accounts.map((account) => account["@id"]),
                 );
