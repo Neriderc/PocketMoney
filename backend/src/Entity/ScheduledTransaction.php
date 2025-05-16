@@ -93,8 +93,8 @@ class ScheduledTransaction
     #[Assert\NotBlank(message: "Description cannot be blank")]
     #[Assert\Length(min: 1, max: 255)]
     #[Assert\Regex(
-        pattern: '/^[\p{L} \'-]+$/u',
-        message: "Description can only contain letters, spaces, hyphens, and apostrophes"
+        pattern: '/^[\p{L}0-9 \'-]+$/u',
+        message: "Name can only contain letters, numbers, spaces, hyphens, and apostrophes"
     )]
     private ?string $description = null;
 
