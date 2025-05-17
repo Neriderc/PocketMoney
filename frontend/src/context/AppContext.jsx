@@ -64,7 +64,6 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem("access_token");
         if (token && !authChecked) {
-            console.log(token);
             apiFetch("users/me")
                 .then((response) => response.json())
                 .then((data) => {
