@@ -7,6 +7,7 @@ export default function CreateTransactionPage() {
     const { householdId, childId, accountId } = useParams();
     const navigate = useNavigate();
     const [amount, setAmount] = useState("");
+    const [transactionType, setTransactionType] = useState("purchase");
     const [shortDescription, setShortDescription] = useState("");
     const [transactionDate, setTransactionDate] = useState(
         new Date().toISOString().split("T")[0],
@@ -69,6 +70,20 @@ export default function CreateTransactionPage() {
         );
     };
 
+    function updateAmount(value, type = transactionType) {
+        let amount = Math.abs(parseFloat(value) || 0);
+        if (type === "purchase") {
+            amount *= -1;
+        }
+        setAmount(amount.toString());
+    }
+
+    function handleTransactionTypeChange(value) {
+        setTransactionType(value);
+        // Make sure amount is positive/negative based on type selection
+        updateAmount(document.getElementById("amount").value, value);
+    }
+
     return (
         <div>
             <NavBar />
@@ -117,9 +132,44 @@ export default function CreateTransactionPage() {
                                     className="form-control"
                                     id="amount"
                                     value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
+                                    onChange={(e) =>
+                                        updateAmount(e.target.value)
+                                    }
                                     required
                                 />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label d-block">
+                                    Transaction Type
+                                </label>
+                                <div
+                                    className="btn-group"
+                                    role="group"
+                                    aria-label="Transaction type toggle"
+                                >
+                                    <button
+                                        type="button"
+                                        className={`btn ${transactionType === "deposit" ? "btn-success" : "btn-outline-success"}`}
+                                        onClick={() =>
+                                            handleTransactionTypeChange(
+                                                "deposit",
+                                            )
+                                        }
+                                    >
+                                        Deposit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`btn ${transactionType === "purchase" ? "btn-danger" : "btn-outline-danger"}`}
+                                        onClick={() =>
+                                            handleTransactionTypeChange(
+                                                "purchase",
+                                            )
+                                        }
+                                    >
+                                        Purchase
+                                    </button>
+                                </div>
                             </div>
                             <div className="mb-3">
                                 <label
