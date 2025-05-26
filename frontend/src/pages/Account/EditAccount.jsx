@@ -39,12 +39,6 @@ export default function EditAccountPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-
         apiFetch(`children/${childId}/accounts/${accountId}`, {
             method: "GET",
         })

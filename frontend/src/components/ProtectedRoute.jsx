@@ -9,6 +9,7 @@ export default function ProtectedRoute({ adminOnly = false, children }) {
     useEffect(() => {
         if (authChecked) {
             if (!user) {
+                console.log("Protected route, no user found");
                 navigate("/login");
             } else if (adminOnly && !isAdmin()) {
                 navigate("/dashboard");

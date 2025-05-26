@@ -16,12 +16,6 @@ export default function AccountTransactionsPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-
         apiFetch(`children/${childId}/accounts/${accountId}`)
             .then((response) => {
                 return response.json();
@@ -33,7 +27,9 @@ export default function AccountTransactionsPage() {
                 console.error("Error fetching account details:", error);
             });
 
-        apiFetch(`accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`)
+        apiFetch(
+            `accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`,
+        )
             .then((response) => {
                 return response.json();
             })

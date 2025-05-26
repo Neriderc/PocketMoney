@@ -9,12 +9,6 @@ export default function NavBar() {
     const [households, setHouseholds] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-
         const fetchHouseholds = async () => {
             try {
                 const response = await apiFetch("households", {
