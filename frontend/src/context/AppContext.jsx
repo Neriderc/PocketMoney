@@ -52,13 +52,27 @@ export const AppProvider = ({ children }) => {
         };
     };
 
-    const logout = () => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("activeHousehold");
-        setUser(null);
-        setActiveHousehold(null);
-        setAuthChecked(null);
-        navigate("/login");
+    const logout = async () => {
+        try {
+            // Remove HTTPS-only cookie by making this request
+            await apiFetch("logout", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+            });
+        } catch (error) {
+            console.error("Failed to logout:", error);
+        } finally {
+            // Clear client-side session data
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("activeHousehold");
+            setUser(null);
+            setActiveHousehold(null);
+            setAuthChecked(null);
+
+            navigate("/login");
+        }
     };
 
     useEffect(() => {
