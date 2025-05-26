@@ -44,7 +44,7 @@ export async function apiFetch(apiResourcePath, logoutCallback, options = {}) {
         refreshPromise = null;
 
         if (refreshed) {
-            return apiFetch(domain + "/api/" + apiResourcePath, options);
+            return apiFetch(apiResourcePath, options);
         } else {
             logoutCallback();
         }
@@ -55,7 +55,7 @@ export async function apiFetch(apiResourcePath, logoutCallback, options = {}) {
 
 async function tryRefreshToken() {
     try {
-        const response = await fetch(domain + "/api/token/refresh", {
+        const response = await fetch("/api/token/refresh", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
