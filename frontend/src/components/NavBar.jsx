@@ -22,7 +22,6 @@ export default function NavBar() {
                         !activeHousehold ||
                         !data.member.some((h) => h.id === activeHousehold.id)
                     ) {
-                        console.log("active household no longer exists");
                         const newActiveHousehold =
                             user?.defaultHousehold || data.member[0];
                         setActiveHousehold(newActiveHousehold);
@@ -52,70 +51,95 @@ export default function NavBar() {
     };
 
     return (
-        <div className="bg-dark text-white py-3 position-relative">
-            <div
-                style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "20px",
-                    transform: "translateY(-50%)",
-                    fontSize: "3rem",
-                    cursor: "pointer",
-                }}
-            >
-                <i className="bi bi-piggy-bank" onClick={handleLogoClick}></i>
-            </div>
+        <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+            <div className="container-fluid">
+                {/* Logo */}
+                <span
+                    className="navbar-brand fs-3 d-flex align-items-center brand-title"
+                    style={{
+                        cursor: "pointer",
+                    }}
+                    onClick={handleLogoClick}
+                >
+                    <i className="bi bi-piggy-bank me-2"></i>
+                    Pocket Money Tracker
+                </span>
 
-            <div className="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                <h2 className="mb-0 fs-5 fs-md-3">Pocket Money Tracker</h2>
-                <div className="d-flex flex-column flex-md-row align-items-center gap-2">
-                    {user && <p className="mb-0">Welcome, {user.username}!</p>}
-                    {households.length > 0 && (
-                        <div className="dropdown">
+                {/* Toggler */}
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent"
+                    aria-controls="navbarContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                {/* Collapsible Content */}
+                <div className="collapse navbar-collapse" id="navbarContent">
+                    <ul className="navbar-nav ms-auto align-items-md-center gap-2">
+                        {user && (
+                            <li className="nav-item text-white">
+                                Welcome, {user.username}!
+                            </li>
+                        )}
+                        {households.length > 1 && (
+                            <li className="nav-item dropdown">
+                                <button
+                                    className="btn btn-outline-light dropdown-toggle"
+                                    id="householdDropdown"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    {activeHousehold
+                                        ? activeHousehold.name
+                                        : "Select Household"}
+                                </button>
+                                <ul
+                                    className="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="householdDropdown"
+                                >
+                                    {households.map((household) => (
+                                        <li key={household.id}>
+                                            <button
+                                                className="dropdown-item"
+                                                onClick={() =>
+                                                    handleSwitchHousehold(
+                                                        household.id,
+                                                    )
+                                                }
+                                            >
+                                                {household.name}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        )}
+                        <li className="nav-item">
                             <button
-                                className="btn btn-outline-light dropdown-toggle"
-                                type="button"
-                                id="householdDropdown"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
+                                className="btn btn-outline-light"
+                                onClick={handleSettingsClick}
                             >
-                                {activeHousehold
-                                    ? activeHousehold.name
-                                    : "Select Household"}
+                                <i className="bi bi-gear"></i>
+                                Settings
                             </button>
-                            <ul
-                                className="dropdown-menu"
-                                aria-labelledby="householdDropdown"
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className="btn btn-outline-light"
+                                onClick={logout}
                             >
-                                {households.map((household) => (
-                                    <li key={household.id}>
-                                        <a
-                                            className="dropdown-item"
-                                            href="#"
-                                            onClick={() =>
-                                                handleSwitchHousehold(
-                                                    household.id,
-                                                )
-                                            }
-                                        >
-                                            {household.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                    <button
-                        className="btn btn-outline-light"
-                        onClick={handleSettingsClick}
-                    >
-                        Settings
-                    </button>
-                    <button className="btn btn-outline-light" onClick={logout}>
-                        Logout
-                    </button>
+                                <i className="bi bi-box-arrow-right"></i>
+                                Logout
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     );
 }
