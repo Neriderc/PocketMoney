@@ -104,6 +104,9 @@ class Child
     #[ORM\OneToMany(targetEntity: ScheduledTransaction::class, mappedBy: 'child', orphanRemoval: true)]
     private Collection $transactionSchedules;
 
+    #[ORM\OneToOne(mappedBy: 'child', cascade: ['persist', 'remove'])]
+    private ?Wishlist $wishlist = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -245,6 +248,23 @@ class Child
                 $transactionSchedule->setChild(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWishlist(): ?Wishlist
+    {
+        return $this->wishlist;
+    }
+
+    public function setWishlist(Wishlist $wishlist): static
+    {
+        // set the owning side of the relation if necessary
+        if ($wishlist->getChild() !== $this) {
+            $wishlist->setChild($this);
+        }
+
+        $this->wishlist = $wishlist;
 
         return $this;
     }
