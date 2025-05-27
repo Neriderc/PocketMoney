@@ -33,6 +33,3 @@ services:
             - { name: 'doctrine.event_listener', event: 'postPersist' }
             - { name: 'doctrine.event_listener', event: 'postUpdate' }
             - { name: 'doctrine.event_listener', event: 'postRemove' }
-
-    App\DataFixtures\AccountFixture:
-        tags: [ 'doctrine.fixture.orm' ]
