@@ -55,7 +55,7 @@ export const AppProvider = ({ children }) => {
     const logout = async () => {
         try {
             // Remove HTTPS-only cookie by making this request
-            await apiFetch("logout", {
+            await fetch("/api/logout", {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -88,7 +88,6 @@ export const AppProvider = ({ children }) => {
                 })
                 .catch((error) => {
                     console.error("Error fetching user details:", error);
-                    logout();
                 })
                 .finally(() => {
                     setAuthChecked(true);

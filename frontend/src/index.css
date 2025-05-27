@@ -65,3 +65,14 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Shrink title for small screens */
+@media (max-width: 768px) {
+  .brand-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 185px;
+  }
+}

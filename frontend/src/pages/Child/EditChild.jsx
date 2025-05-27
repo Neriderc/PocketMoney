@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar.jsx";
 import { useAppContext } from "../../context/AppContext.jsx";
+import ScheduledTransactionTable from "../../components/Child/ScheduledTransactionTable.jsx";
 
 export default function EditChildPage() {
     const { householdId, childId } = useParams();
@@ -271,6 +272,12 @@ export default function EditChildPage() {
                     </div>
                 </div>
 
+                <div
+                    className="card shadow-sm border-0 mb-4"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                >
+                    <ScheduledTransactionTable />
+                </div>
                 <div className="card border-danger mb-4">
                     <div className="card-body text-danger">
                         <h5 className="card-title">Delete Child</h5>

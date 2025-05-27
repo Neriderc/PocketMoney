@@ -16,27 +16,17 @@ export default function AccountTransactionsPage() {
     const { apiFetch, logout } = useAppContext();
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-
         apiFetch(`children/${childId}/accounts/${accountId}`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setAccount(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching account details:", error);
-            });
+            .then((response) => response.json())
+            .then((data) => setAccount(data))
+            .catch((error) =>
+                console.error("Error fetching account details:", error),
+            );
 
-        apiFetch(`accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`)
-            .then((response) => {
-                return response.json();
-            })
+        apiFetch(
+            `accounts/${accountId}/transactions?page=${currentPage}&itemsPerPage=${itemsPerPage}`,
+        )
+            .then((response) => response.json())
             .then((data) => {
                 setTransactions(data["member"]);
                 setTotalItems(data["totalItems"]);
@@ -48,49 +38,33 @@ export default function AccountTransactionsPage() {
             });
     }, [accountId, currentPage, itemsPerPage, navigate]);
 
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-    };
-
+    const handlePageChange = (newPage) => setCurrentPage(newPage);
     const handleItemsPerPageChange = (event) => {
         setItemsPerPage(parseInt(event.target.value, 10));
         setCurrentPage(1);
     };
-
-    const handleBackToChild = () => {
+    const handleBackToChild = () =>
         navigate(`/household/${householdId}/child/${childId}`);
-    };
-
-    const handleCreateTransaction = () => {
+    const handleCreateTransaction = () =>
         navigate(
             `/household/${householdId}/child/${childId}/account/${accountId}/transaction/add`,
         );
-    };
-
-    const handleEditAccount = () => {
+    const handleEditAccount = () =>
         navigate(
             `/household/${householdId}/child/${childId}/account/${accountId}/edit`,
         );
-    };
-
-    const handleViewTransaction = (transactionId) => {
+    const handleViewTransaction = (transactionId) =>
         navigate(
             `/household/${householdId}/child/${childId}/account/${accountId}/transaction/${transactionId}`,
         );
-    };
 
     if (isLoading) {
         return (
             <div>
                 <NavBar />
-                <div className="container mt-5">
-                    <div className="text-center">
-                        <div
-                            className="spinner-border text-primary"
-                            role="status"
-                        >
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
+                <div className="container mt-5 text-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
@@ -130,9 +104,7 @@ export default function AccountTransactionsPage() {
                                             account.color || "white",
                                         padding: "10px",
                                         borderRadius: "5px",
-                                        borderStyle: "solid",
-                                        borderWidth: "1px",
-                                        borderColor: "#DDD",
+                                        border: "1px solid #DDD",
                                     }}
                                 >
                                     <i
@@ -145,7 +117,7 @@ export default function AccountTransactionsPage() {
                                         }}
                                     ></i>
                                     <h3
-                                        className={"card-title"}
+                                        className="card-title"
                                         style={{
                                             color: getTextColourFromBrightness(
                                                 account.color || "#FFFFFF",
@@ -200,11 +172,15 @@ export default function AccountTransactionsPage() {
                                 <thead>
                                     <tr>
                                         <th style={{ width: "120px" }}>Date</th>
-                                        <th>Description</th>
+                                        <th className="d-none d-md-table-cell">
+                                            Description
+                                        </th>
                                         <th style={{ width: "100px" }}>
                                             Amount
                                         </th>
-                                        <th>Comment</th>
+                                        <th className="d-none d-md-table-cell">
+                                            Comment
+                                        </th>
                                         <th style={{ width: "100px" }}>
                                             Actions
                                         </th>
@@ -219,7 +195,8 @@ export default function AccountTransactionsPage() {
                                                         transaction.transactionDate,
                                                     ).toLocaleDateString()}
                                                 </td>
-                                                <td>
+
+                                                <td className="d-none d-md-table-cell">
                                                     <span
                                                         title={
                                                             transaction.description
@@ -240,13 +217,15 @@ export default function AccountTransactionsPage() {
                                                         }
                                                     </span>
                                                 </td>
+
                                                 <td style={{ width: "100px" }}>
                                                     $
                                                     {transaction.amount.toFixed(
                                                         2,
                                                     )}
                                                 </td>
-                                                <td>
+
+                                                <td className="d-none d-md-table-cell">
                                                     <span
                                                         title={
                                                             transaction.comment
@@ -265,6 +244,7 @@ export default function AccountTransactionsPage() {
                                                         {transaction.comment}
                                                     </span>
                                                 </td>
+
                                                 <td style={{ width: "100px" }}>
                                                     <button
                                                         onClick={() =>
@@ -292,6 +272,7 @@ export default function AccountTransactionsPage() {
                                 </tbody>
                             </table>
                         </div>
+
                         <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>
                                 <span>Items per page: </span>
