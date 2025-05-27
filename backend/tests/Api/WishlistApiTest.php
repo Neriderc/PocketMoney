@@ -19,59 +19,28 @@ class WishlistApiTest extends BaseApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
-            '@context' => '/api/contexts/ScheduledTransaction',
+            '@context' => '/api/contexts/Wishlist',
             '@type' => 'Collection',
+            'totalItems' => 1,
         ]);
     }
 
     public function testUnauthorizedAccess(): void
     {
         $client = static::createClient();
-        $transaction = $this->getRepository(Transaction::class)
-            ->findOneBy(['description' => 'Transaction 1']);
+        $child = $this->getRepository(Child::class)->findOneBy(['name' => 'Child 1']);
 
-        $client->request('GET', '/api/accounts/' . $transaction->getAccount()->getId() . '/transactions/' . $transaction->getId());
+        $client->request('GET', '/api/children/' . $child->getId() . '/wishlists');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function testLinkedUserCanViewTransaction(): void
+    public function testForbiddenGetWishlistsCollection(): void
     {
-        $account = $this->getRepository(Account::class)->findOneBy(['name' => 'Account 1']);
-        $transaction = $this->getRepository(Transaction::class)
-            ->findOneBy(['account' => $account]);
+        $child = $this->getFixtureReference('child_other_household', Child::class);
 
         $client = $this->createAuthenticatedClient();
-        $client->request('GET', '/api/accounts/' . $account->getId() . '/transactions/' . $transaction->getId());
-
-        $this->assertResponseIsSuccessful();
-
-        $repo = static::getContainer()->get(TransactionRepository::class);
-        $fetched = $repo->find($transaction->getId());
-        $this->assertNotNull($fetched);
-        $this->assertEquals($account->getId(), $fetched->getAccount()->getId());
-    }
-
-    public function testForbiddenGetTransactionsCollection(): void
-    {
-        $transaction = $this->getFixtureReference('transaction_other_household', Transaction::class);
-        $account = $transaction->getAccount();
-
-        $client = $this->createAuthenticatedClient();
-        $client->request('GET', '/api/accounts/' . $account->getId() . '/transactions');
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
-
-    public function testForbiddenUpdateTransaction(): void
-    {
-        $transaction = $this->getFixtureReference('transaction_other_household', Transaction::class);
-
-        $client = $this->createAuthenticatedClient();
-        $client->request('PATCH', '/api/accounts/' . $transaction->getAccount()->getId() . '/transactions/' . $transaction->getId(), [
-            'json' => ['description' => 'Illegal update'],
-            'headers' => ['Content-Type' => 'application/merge-patch+json']
-        ]);
+        $client->request('GET', '/api/children/' . $child->getId() . '/wishlists');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
