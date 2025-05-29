@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\AddAccountController;
 use App\Controller\GetAccountsController;
 use App\Repository\AccountRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * An account that belongs to a child for tracking transactions and a total balance.
  */
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 #[ApiResource(
     operations: [
         new Get(
@@ -107,11 +110,11 @@ class Account
 
     #[ORM\Column]
     #[Groups(['accounts:details'])]
-    private ?\DateTimeImmutable $createdAt;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     #[Groups(['accounts:details'])]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(length: 50, nullable: true)]
     #[Assert\Length(max: 50)]
@@ -135,8 +138,8 @@ class Account
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->transactions = new ArrayCollection();
         $this->transactionSchedules = new ArrayCollection();
     }
@@ -154,7 +157,6 @@ class Account
     public function setName(string $name): static
     {
         $this->name = $name;
-        $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
@@ -166,7 +168,6 @@ class Account
     public function setBalance(float $balance): static
     {
         $this->balance = $balance;
-        $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
@@ -178,7 +179,6 @@ class Account
     public function setChild(?Child $child): static
     {
         $this->child = $child;
-        $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
@@ -212,23 +212,23 @@ class Account
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    private function setCreatedAt(\DateTimeImmutable $createdAt): static
+    private function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -242,7 +242,6 @@ class Account
     public function setIcon(?string $icon): static
     {
         $this->icon = $icon;
-        $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
@@ -254,7 +253,6 @@ class Account
     public function setColor(?string $color): static
     {
         $this->color = $color;
-        $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
@@ -283,5 +281,11 @@ class Account
         }
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

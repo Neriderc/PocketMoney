@@ -10,9 +10,9 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\AddChildController;
-use App\Controller\DeleteAccountController;
 use App\Repository\ChildRepository;
 use App\State\ChildCollectionProvider;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -24,6 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents a child in the family. Can be claimed by a user account.
  */
 #[ORM\Entity(repositoryClass: ChildRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -71,11 +73,11 @@ class Child
 
     #[ORM\Column]
     #[Groups(['children:details'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     #[Groups(['children:details'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\OneToOne(inversedBy: 'linkedChild', cascade: ['persist', 'remove'])]
     #[Assert\Valid]
@@ -91,7 +93,7 @@ class Child
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     #[Groups(['children:details', 'children:update'])]
-    private ?\DateTimeImmutable $dateOfBirth = null;
+    private ?DateTimeImmutable $dateOfBirth = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'children')]
     #[ORM\JoinColumn(nullable: false)]
@@ -109,8 +111,8 @@ class Child
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->accounts = new ArrayCollection();
         $this->transactionSchedules = new ArrayCollection();
     }
@@ -132,26 +134,26 @@ class Child
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    private function setCreatedAt(\DateTimeImmutable $createdAt): static
+    private function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    private function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    private function setUpdatedAt(): static
     {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
 
         return $this;
     }
@@ -198,12 +200,12 @@ class Child
         return $this;
     }
 
-    public function getDateOfBirth(): ?\DateTimeImmutable
+    public function getDateOfBirth(): ?DateTimeImmutable
     {
         return $this->dateOfBirth;
     }
 
-    public function setDateOfBirth(?\DateTimeImmutable $dateOfBirth): static
+    public function setDateOfBirth(?DateTimeImmutable $dateOfBirth): static
     {
         $this->dateOfBirth = $dateOfBirth;
 
@@ -267,5 +269,11 @@ class Child
         $this->wishlist = $wishlist;
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

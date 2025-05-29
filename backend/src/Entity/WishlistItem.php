@@ -13,10 +13,12 @@ use App\Controller\AddWishlistItemController;
 use App\Controller\DeleteWishlistItemController;
 use App\Repository\WishlistItemRepository;
 use App\State\WishlistItemCollectionProvider;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WishlistItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -78,11 +80,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
     #[ORM\Column]
     #[Groups(['wishlist_item:details'])]
-    private ?\DateTimeImmutable $createdAt;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     #[Groups(['wishlist_item:details'])]
-    private ?\DateTimeImmutable $updatedAt;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['wishlist_item:details', 'wishlist_item:update'])]
@@ -94,8 +96,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -127,24 +129,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -173,5 +175,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         $this->wishlist = $wishlist;
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

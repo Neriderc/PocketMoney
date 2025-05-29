@@ -24,9 +24,20 @@ abstract class BaseApiTestCase extends ApiTestCase
 
         $container = static::getContainer();
         $this->entityManager = $container->get('doctrine')->getManager();
-
+        $this->entityManager->beginTransaction();
         $this->loadFixtures();
         $this->authenticateUsers();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if ($this->entityManager->getConnection()->isTransactionActive()) {
+            $this->entityManager->rollback();
+        }
+
+        $this->entityManager->close();
     }
 
     protected function loadFixtures(): void

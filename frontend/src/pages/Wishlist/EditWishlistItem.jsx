@@ -108,12 +108,12 @@ export default function EditWishlistItemPage() {
                         <button
                             onClick={() =>
                                 navigate(
-                                    `/household/${householdId}/child/${childId}`,
+                                    `/household/${householdId}/child/${childId}/wishlist/${wishlistId}/wishlist_item/${wishlistItemId}`,
                                 )
                             }
                             className="btn btn-secondary mb-3"
                         >
-                            &larr; Back to child
+                            &larr; Back to wishlist item
                         </button>
                         <h5 className="card-title">
                             Edit Wishlist Item Details

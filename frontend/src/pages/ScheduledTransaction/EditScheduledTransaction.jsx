@@ -151,12 +151,12 @@ export default function EditScheduledTransactionPage() {
                             <button
                                 onClick={() =>
                                     navigate(
-                                        `/household/${householdId}/child/${childId}`,
+                                        `/household/${householdId}/child/${childId}/scheduled_transaction/${scheduledTransactionId}`,
                                     )
                                 }
                                 className="btn btn-secondary"
                             >
-                                &larr; Back to Child
+                                &larr; Back to scheduled transaction
                             </button>
                         </div>
                         <h3 className="card-title text-primary mb-4">
