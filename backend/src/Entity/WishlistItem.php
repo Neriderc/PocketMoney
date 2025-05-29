@@ -35,7 +35,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'wishlistId' => new Link(toProperty: 'wishlist', fromClass: Wishlist::class),
                 'id' => new Link(fromClass: WishlistItem::class),
             ],
-            normalizationContext: ['groups' => ['transactions:details']],
+            normalizationContext: ['groups' => ['wishlist_item:details']],
             security: "is_granted('ROLE_ADMIN') or object.getAccount().getChild().getHousehold().getUsers().contains(user) or object.getAccount().getChild().getLinkedUser() === user"
         ),
         new Post(
@@ -77,10 +77,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     private ?float $amount = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['wishlist_item:details'])]
+    private ?\DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[Groups(['wishlist_item:details'])]
+    private ?\DateTimeImmutable $updatedAt;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['wishlist_item:details', 'wishlist_item:update'])]

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar.jsx";
 import { getTextColourFromBrightness } from "../../utils/utils.js";
 import { useAppContext } from "../../context/AppContext.jsx";
-import ScheduledTransactionTable from "../../components/Child/ScheduledTransactionTable.jsx";
+import WishlistItemTable from "../../components/Child/WishlistItemTable.jsx";
 
 export default function ChildPage() {
     const { householdId, childId } = useParams();
@@ -185,6 +185,12 @@ export default function ChildPage() {
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div
+                    className="card shadow-sm border-0"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                >
+                    <WishlistItemTable />
                 </div>
             </div>
         </div>
