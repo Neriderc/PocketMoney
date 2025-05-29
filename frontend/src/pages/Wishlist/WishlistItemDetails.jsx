@@ -81,7 +81,7 @@ export default function WishlistItemDetailsPage() {
                                 onClick={handleBackToChild}
                                 className="btn btn-secondary"
                             >
-                                &larr; Back to child details
+                                &larr; Back to child
                             </button>
                             <button
                                 onClick={handleEditTransactions}

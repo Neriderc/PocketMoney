@@ -28,6 +28,7 @@ import CreateUserPage from "./pages/User/CreateUser.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import WishlistItemDetailsPage from "./pages/Wishlist/WishlistItemDetails.jsx";
 import EditWishlistItemPage from "./pages/Wishlist/EditWishlistItem.jsx";
+import CreateWishlistItemPage from "./pages/Wishlist/CreateWishlistItem.jsx";
 
 function App() {
     return (
@@ -61,6 +62,10 @@ function App() {
             <Route
                 path="/household/:householdId/child/:childId/account/:accountId/transaction/add"
                 element={<CreateTransactionPage />}
+            />
+            <Route
+                path="/household/:householdId/child/:childId/wishlist/:wishlistId/wishlist_item/add"
+                element={<CreateWishlistItemPage />}
             />
             <Route
                 path="/household/:householdId/child/:childId/scheduled_transaction/add"
