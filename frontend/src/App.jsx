@@ -29,6 +29,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import WishlistItemDetailsPage from "./pages/Wishlist/WishlistItemDetails.jsx";
 import EditWishlistItemPage from "./pages/Wishlist/EditWishlistItem.jsx";
 import CreateWishlistItemPage from "./pages/Wishlist/CreateWishlistItem.jsx";
+import EditSavingGoalPage from "./pages/Wishlist/EditSavingGoal.jsx";
 
 function App() {
     return (
@@ -94,6 +95,10 @@ function App() {
             <Route
                 path="/household/:householdId/child/:childId/wishlist/:wishlistId/wishlist_item/:wishlistItemId/edit"
                 element={<EditWishlistItemPage />}
+            />
+            <Route
+                path="/household/:householdId/child/:childId/wishlist/edit"
+                element={<EditSavingGoalPage />}
             />
             <Route
                 path="/household/:householdId/child/:childId/account/:accountId/edit"
