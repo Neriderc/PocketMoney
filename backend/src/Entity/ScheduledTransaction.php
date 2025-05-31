@@ -14,6 +14,7 @@ use App\Enum\AmountBase;
 use App\Enum\RepeatFrequency;
 use App\Repository\ScheduledTransactionRepository;
 use App\State\ScheduledTransactionCollectionProvider;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ScheduledTransactionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -82,11 +85,11 @@ class ScheduledTransaction
 
     #[ORM\Column]
     #[Groups(['scheduled_transactions:details'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     #[Groups(['scheduled_transactions:details'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(length: 255)]
     #[Groups(['scheduled_transactions:details', 'scheduled_transactions:update'])]
@@ -107,7 +110,7 @@ class ScheduledTransaction
     #[Groups(['scheduled_transactions:details', 'scheduled_transactions:update'])]
     #[Assert\NotNull]
     #[Assert\NotNull]
-    private ?\DateTimeImmutable $nextExecutionDate = null;
+    private ?DateTimeImmutable $nextExecutionDate = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['scheduled_transactions:details', 'scheduled_transactions:update'])]
@@ -131,8 +134,8 @@ class ScheduledTransaction
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->accounts = new ArrayCollection();
     }
 
@@ -153,24 +156,24 @@ class ScheduledTransaction
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    private function setCreatedAt(\DateTimeImmutable $createdAt): static
+    private function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    private function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    private function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -201,12 +204,12 @@ class ScheduledTransaction
         return $this;
     }
 
-    public function getNextExecutionDate(): ?\DateTimeImmutable
+    public function getNextExecutionDate(): ?DateTimeImmutable
     {
         return $this->nextExecutionDate;
     }
 
-    public function setNextExecutionDate(\DateTimeImmutable $nextExecutionDate): static
+    public function setNextExecutionDate(DateTimeImmutable $nextExecutionDate): static
     {
         $this->nextExecutionDate = $nextExecutionDate;
 
@@ -271,5 +274,11 @@ class ScheduledTransaction
         $this->repeatFrequency = $repeatFrequency;
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -14,6 +13,7 @@ use App\Controller\AddTransactionController;
 use App\Controller\DeleteTransactionController;
 use App\Repository\TransactionRepository;
 use App\State\TransactionCollectionProvider;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -84,7 +84,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         #[ORM\Column(nullable: true)]
         #[Groups(['transactions:details', 'transactions:update'])]
-        private ?\DateTimeImmutable $transactionDate = null;
+        private ?DateTimeImmutable $transactionDate = null;
 
         #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'transactions')]
         #[ORM\JoinColumn(nullable: false)]
@@ -92,11 +92,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         #[ORM\Column]
         #[Groups(['transactions:details'])]
-        private ?\DateTimeImmutable $createdAt;
+        private ?DateTimeImmutable $createdAt;
 
         #[ORM\Column]
         #[Groups(['transactions:details'])]
-        private ?\DateTimeImmutable $updatedAt;
+        private ?DateTimeImmutable $updatedAt;
 
         #[ORM\Column(length: 255)]
         #[Groups(['transactions:details', 'transactions:update'])]
@@ -115,8 +115,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         public function __construct()
         {
-            $this->createdAt = new \DateTimeImmutable();
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->createdAt = new DateTimeImmutable();
+            $this->updatedAt = new DateTimeImmutable();
         }
 
         public function getId(): ?int
@@ -136,12 +136,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             return $this;
         }
 
-        public function getTransactionDate(): ?\DateTimeImmutable
+        public function getTransactionDate(): ?DateTimeImmutable
         {
             return $this->transactionDate;
         }
 
-        public function setTransactionDate(?\DateTimeImmutable $transactionDate): static
+        public function setTransactionDate(?DateTimeImmutable $transactionDate): static
         {
             $this->transactionDate = $transactionDate;
 
@@ -160,24 +160,24 @@ use Symfony\Component\Validator\Constraints as Assert;
             return $this;
         }
 
-        public function getCreatedAt(): ?\DateTimeImmutable
+        public function getCreatedAt(): ?DateTimeImmutable
         {
             return $this->createdAt;
         }
 
-        private function setCreatedAt(\DateTimeImmutable $createdAt): static
+        private function setCreatedAt(DateTimeImmutable $createdAt): static
         {
             $this->createdAt = $createdAt;
 
             return $this;
         }
 
-        public function getUpdatedAt(): ?\DateTimeImmutable
+        public function getUpdatedAt(): ?DateTimeImmutable
         {
             return $this->updatedAt;
         }
 
-        private function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+        private function setUpdatedAt(DateTimeImmutable $updatedAt): static
         {
             $this->updatedAt = $updatedAt;
 
@@ -206,5 +206,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             $this->comment = $comment;
 
             return $this;
+        }
+
+        #[ORM\PreUpdate]
+        public function onPreUpdate(): void
+        {
+            $this->updatedAt = new DateTimeImmutable();
         }
     }

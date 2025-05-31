@@ -3,13 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar.jsx";
 import { getTextColourFromBrightness } from "../../utils/utils.js";
 import { useAppContext } from "../../context/AppContext.jsx";
-import ScheduledTransactionTable from "../../components/Child/ScheduledTransactionTable.jsx";
+import WishlistItemTable from "../../components/Child/WishlistItemTable.jsx";
 
 export default function ChildPage() {
     const { householdId, childId } = useParams();
     const navigate = useNavigate();
     const [child, setChild] = useState(null);
     const [accounts, setAccounts] = useState([]);
+    const [wishlist, setWishlist] = useState([]);
+    const [savingsGoal, setSavingsGoal] = useState(null);
+    const [savingsGoalLink, setSavingsGoalLink] = useState(null);
+    const [cantBuyBeforeDate, setCantBuyBeforeDate] = useState(null);
     const { apiFetch } = useAppContext();
 
     useEffect(() => {
@@ -39,6 +43,42 @@ export default function ChildPage() {
             .catch((error) =>
                 console.error("Error fetching accounts data:", error),
             );
+
+        apiFetch(`children/${childId}/wishlists`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.member && Array.isArray(data.member)) {
+                    setWishlist(data.member[0]);
+                    setCantBuyBeforeDate(
+                        new Date(
+                            data.member[0].cantBuyBeforeDate,
+                        ).toLocaleDateString(),
+                    );
+                    setWishlist(data.member);
+                    const parts = data.member[0].currentlySavingFor.split("/");
+                    const wishlistItemId = parts.pop();
+
+                    setSavingsGoalLink(
+                        `/household/${householdId}/child/${childId}/wishlist/${data.member[0].id}/wishlist_item/${wishlistItemId}`,
+                    );
+                    const savingItemUri =
+                        data.member[0].currentlySavingFor.substring(5);
+                    apiFetch(savingItemUri)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            setSavingsGoal(data.description);
+                        })
+                        .catch((error) =>
+                            console.error(
+                                "Error fetching wishlist items:",
+                                error,
+                            ),
+                        );
+                }
+            })
+            .catch((error) =>
+                console.error("Error fetching wishlist data:", error),
+            );
     }, [childId, navigate]);
 
     if (!child) {
@@ -67,6 +107,10 @@ export default function ChildPage() {
 
     const handleEditChild = () => {
         navigate(`/household/${householdId}/child/${childId}/edit`);
+    };
+
+    const handleEditGoal = () => {
+        navigate(`/household/${householdId}/child/${childId}/wishlist/edit`);
     };
 
     const handleCreateTransaction = (childId, accountId) => {
@@ -110,7 +154,37 @@ export default function ChildPage() {
                     </div>
                 </div>
                 <div
-                    className="card shadow-sm border-0"
+                    className="card shadow-sm border-0 mb-4 "
+                    style={{ backgroundColor: "#f8f9fa" }}
+                >
+                    <div className="card-body">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5 className="text-secondary">Saving goal</h5>
+                            <button
+                                onClick={handleEditGoal}
+                                className="btn btn-outline-secondary mb-3"
+                            >
+                                Edit goal
+                            </button>
+                        </div>
+                        <p className="card-text text-secondary">
+                            Currently saving for:{" "}
+                            <a href={savingsGoalLink}>
+                                <strong className="text-dark">
+                                    {savingsGoal}
+                                </strong>
+                            </a>
+                        </p>
+                        <p className="card-text text-secondary">
+                            Can't buy before:{" "}
+                            <strong className="text-dark">
+                                {cantBuyBeforeDate}
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+                <div
+                    className="card shadow-sm border-0 mb-4 "
                     style={{ backgroundColor: "#f8f9fa" }}
                 >
                     <div className="card-body">
@@ -185,6 +259,12 @@ export default function ChildPage() {
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div
+                    className="card shadow-sm border-0 mb-4 "
+                    style={{ backgroundColor: "#f8f9fa" }}
+                >
+                    <WishlistItemTable />
                 </div>
             </div>
         </div>

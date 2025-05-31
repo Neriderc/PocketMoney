@@ -124,8 +124,7 @@ export default function NavBar() {
                                 className="btn btn-outline-light"
                                 onClick={handleSettingsClick}
                             >
-                                <i className="bi bi-gear"></i>
-                                Settings
+                                <i className="bi bi-gear"></i> Settings
                             </button>
                         </li>
                         <li className="nav-item">
@@ -133,8 +132,7 @@ export default function NavBar() {
                                 className="btn btn-outline-light"
                                 onClick={logout}
                             >
-                                <i className="bi bi-box-arrow-right"></i>
-                                Logout
+                                <i className="bi bi-box-arrow-right"></i> Logout
                             </button>
                         </li>
                     </ul>

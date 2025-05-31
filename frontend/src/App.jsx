@@ -26,6 +26,10 @@ import UserDetailsPage from "./pages/User/UserDetails.jsx";
 import EditUserPage from "./pages/User/EditUser.jsx";
 import CreateUserPage from "./pages/User/CreateUser.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import WishlistItemDetailsPage from "./pages/Wishlist/WishlistItemDetails.jsx";
+import EditWishlistItemPage from "./pages/Wishlist/EditWishlistItem.jsx";
+import CreateWishlistItemPage from "./pages/Wishlist/CreateWishlistItem.jsx";
+import EditSavingGoalPage from "./pages/Wishlist/EditSavingGoal.jsx";
 
 function App() {
     return (
@@ -61,6 +65,10 @@ function App() {
                 element={<CreateTransactionPage />}
             />
             <Route
+                path="/household/:householdId/child/:childId/wishlist/:wishlistId/wishlist_item/add"
+                element={<CreateWishlistItemPage />}
+            />
+            <Route
                 path="/household/:householdId/child/:childId/scheduled_transaction/add"
                 element={<CreateScheduledTransactionPage />}
             />
@@ -77,8 +85,20 @@ function App() {
                 element={<TransactionDetailsPage />}
             />
             <Route
+                path="/household/:householdId/child/:childId/wishlist/:wishlistId/wishlist_item/:wishlistItemId"
+                element={<WishlistItemDetailsPage />}
+            />
+            <Route
                 path="/household/:householdId/child/:childId/account/:accountId/transaction/:transactionId/edit"
                 element={<EditTransactionPage />}
+            />
+            <Route
+                path="/household/:householdId/child/:childId/wishlist/:wishlistId/wishlist_item/:wishlistItemId/edit"
+                element={<EditWishlistItemPage />}
+            />
+            <Route
+                path="/household/:householdId/child/:childId/wishlist/edit"
+                element={<EditSavingGoalPage />}
             />
             <Route
                 path="/household/:householdId/child/:childId/account/:accountId/edit"

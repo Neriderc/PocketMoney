@@ -8,6 +8,8 @@ use App\Entity\Household;
 use App\Entity\ScheduledTransaction;
 use App\Entity\Transaction;
 use App\Entity\User;
+use App\Entity\Wishlist;
+use App\Entity\WishlistItem;
 use App\Enum\AmountBase;
 use App\Enum\RepeatFrequency;
 use App\Service\AccountService;
@@ -61,6 +63,17 @@ class BaseFixture extends Fixture
         $child->addTransactionSchedule($scheduledTransaction);
         $manager->persist($scheduledTransaction);
 
+        $wishlist = new Wishlist();
+        $child->setWishlist($wishlist);
+        $wishlistItem = new WishlistItem();
+        $wishlistItem->setWishlist($wishlist);
+        $wishlistItem->setAmount(1);
+        $wishlistItem->setPriority(1);
+        $wishlistItem->setDescription('Wishlist Item 1');
+        $manager->persist($wishlistItem);
+        $manager->persist($wishlist);
+
+
 
         $household2 = $this->createHouseholdWithData($manager, $user, 2, 4, 3);
         $household2->setName("Household 2");
@@ -84,6 +97,18 @@ class BaseFixture extends Fixture
         $this->addReference("transaction_other_household", $transaction);
 
         $manager->persist($scheduledTransactionOther);
+
+        $wishlistOther = new Wishlist();
+        $otherChild->setWishlist($wishlistOther);
+        $wishlistItemOther = new WishlistItem();
+        $wishlistItemOther->setWishlist($wishlistOther);
+        $wishlistItemOther->setAmount(1);
+        $wishlistItemOther->setPriority(1);
+        $wishlistItemOther->setDescription('Wishlist Item Other Child 1');
+        $this->addReference("wishlist_other_household", $wishlistOther);
+        $this->addReference("wishlist_item_other_household", $wishlistItemOther);
+        $manager->persist($wishlistItemOther);
+        $manager->persist($wishlistOther);
 
         $manager->flush();
     }

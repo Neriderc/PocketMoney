@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\DeleteHouseholdController;
 use App\Repository\HouseholdRepository;
 use App\State\HouseholdCollectionProvider;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HouseholdRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 #[ApiResource(
     operations: [
         new Post(
@@ -65,10 +68,10 @@ class Household
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(length: 2000, nullable: true)]
     #[Assert\Length(max: 2000)]
@@ -83,8 +86,8 @@ class Household
     public function __construct()
     {
         $this->children = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->users = new ArrayCollection();
     }
 
@@ -135,24 +138,24 @@ class Household
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    private function setCreatedAt(\DateTimeImmutable $createdAt): static
+    private function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    private function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    private function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -196,5 +199,11 @@ class Household
         }
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }
