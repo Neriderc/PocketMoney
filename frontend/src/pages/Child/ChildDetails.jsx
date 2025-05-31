@@ -49,31 +49,40 @@ export default function ChildPage() {
             .then((data) => {
                 if (data.member && Array.isArray(data.member)) {
                     setWishlist(data.member[0]);
-                    setCantBuyBeforeDate(
-                        new Date(
-                            data.member[0].cantBuyBeforeDate,
-                        ).toLocaleDateString(),
-                    );
-                    setWishlist(data.member);
-                    const parts = data.member[0].currentlySavingFor.split("/");
-                    const wishlistItemId = parts.pop();
-
-                    setSavingsGoalLink(
-                        `/household/${householdId}/child/${childId}/wishlist/${data.member[0].id}/wishlist_item/${wishlistItemId}`,
-                    );
-                    const savingItemUri =
-                        data.member[0].currentlySavingFor.substring(5);
-                    apiFetch(savingItemUri)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            setSavingsGoal(data.description);
-                        })
-                        .catch((error) =>
-                            console.error(
-                                "Error fetching wishlist items:",
-                                error,
-                            ),
+                    if (data.member[0].cantBuyBeforeDate) {
+                        setCantBuyBeforeDate(
+                            new Date(
+                                data.member[0].cantBuyBeforeDate,
+                            ).toLocaleDateString(),
                         );
+                    } else {
+                        setCantBuyBeforeDate("");
+                    }
+                    if (data.member[0].currentlySavingFor) {
+                        const parts =
+                            data.member[0].currentlySavingFor.split("/");
+                        const wishlistItemId = parts.pop();
+
+                        setSavingsGoalLink(
+                            `/household/${householdId}/child/${childId}/wishlist/${data.member[0].id}/wishlist_item/${wishlistItemId}`,
+                        );
+                        const savingItemUri =
+                            data.member[0].currentlySavingFor.substring(5);
+                        apiFetch(savingItemUri)
+                            .then((response) => response.json())
+                            .then((data) => {
+                                setSavingsGoal(data.description);
+                            })
+                            .catch((error) =>
+                                console.error(
+                                    "Error fetching wishlist items:",
+                                    error,
+                                ),
+                            );
+                    } else {
+                        setSavingsGoal("");
+                        setSavingsGoalLink("");
+                    }
                 }
             })
             .catch((error) =>

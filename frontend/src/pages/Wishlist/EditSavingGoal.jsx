@@ -21,9 +21,13 @@ export default function EditSavingGoalPage() {
             .then((data) => {
                 if (data.member && Array.isArray(data.member)) {
                     setWishlist(data.member[0]);
-                    setNewCantBuyBeforeDate(
-                        data.member[0].cantBuyBeforeDate.slice(0, 10),
-                    );
+                    if (data.member[0].cantBuyBeforeDate) {
+                        setNewCantBuyBeforeDate(
+                            data.member[0].cantBuyBeforeDate.slice(0, 10),
+                        );
+                    } else {
+                        setNewCantBuyBeforeDate("");
+                    }
                     setNewSavingsGoal(data.member[0].currentlySavingFor);
 
                     apiFetch(`wishlists/${data.member[0].id}/wishlist_items`)
