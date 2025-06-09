@@ -28,7 +28,11 @@ export default function EditSavingGoalPage() {
                     } else {
                         setNewCantBuyBeforeDate("");
                     }
-                    setNewSavingsGoal(data.member[0].currentlySavingFor);
+                    if (data.member[0].currentlySavingFor) {
+                        setNewSavingsGoal(data.member[0].currentlySavingFor);
+                    } else {
+                        setNewSavingsGoal(null);
+                    }
 
                     apiFetch(`wishlists/${data.member[0].id}/wishlist_items`)
                         .then((response) => response.json())
@@ -48,10 +52,13 @@ export default function EditSavingGoalPage() {
             );
     }, [childId]);
 
-    const wishlistItemOptions = wishlistItems.map((item) => ({
-        value: item["@id"],
-        label: item.description,
-    }));
+    const wishlistItemOptions = [
+        ...wishlistItems.map((item) => ({
+            value: item["@id"],
+            label: item.description,
+        })),
+        { value: null, label: "None" },
+    ];
 
     const handleUpdateSavingsGoal = () => {
         const payload = {
