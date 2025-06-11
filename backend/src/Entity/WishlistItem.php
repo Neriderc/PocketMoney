@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'id' => new Link(fromClass: WishlistItem::class),
             ],
             normalizationContext: ['groups' => ['wishlist_item:details']],
-            security: "is_granted('ROLE_ADMIN') or object.getAccount().getChild().getHousehold().getUsers().contains(user) or object.getAccount().getChild().getLinkedUser() === user"
+            security: "is_granted('ROLE_ADMIN') or object.getWishlist().getChild().getHousehold().getUsers().contains(user) or object.getAccount().getChild().getLinkedUser() === user"
         ),
         new Post(
             uriTemplate: '/wishlists/{wishlistId}/wishlist_items',
