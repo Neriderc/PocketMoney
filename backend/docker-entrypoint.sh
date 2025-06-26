@@ -46,5 +46,17 @@ if [[ -n "$DEFAULT_USERNAME" && -n "$DEFAULT_PASSWORD" ]]; then
   php bin/console app:create-user "$DEFAULT_USERNAME" "$DEFAULT_PASSWORD" "ROLE_ADMIN" || true
 fi
 
+# Set time zone
+if [ -n "$TZ" ]; then
+  echo "Setting timezone to $TZ"
+
+  # System time
+  ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime
+  echo "$TZ" > /etc/timezone
+
+  # PHP time
+  echo "date.timezone=$TZ" > /usr/local/etc/php/conf.d/docker-timezone.ini
+fi
+
 # Start supervisord (to run php-fpm and nginx)
 exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

@@ -5,6 +5,7 @@ services:
       - "8000:80"
     volumes:
       - ./data/db:/var/www/backend/var/db
+      - ./data/jwt:/var/www/backend/config/jwt
     environment:
       APP_ENV: prod
       APP_DEBUG: 0
@@ -12,3 +13,4 @@ services:
       DEFAULT_USERNAME: admin
       DEFAULT_PASSWORD: changeme
       DOMAIN: example.com
+      TZ: Pacific/Auckland
