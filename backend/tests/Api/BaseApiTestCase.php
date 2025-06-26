@@ -4,11 +4,13 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
-use App\DataFixtures\BaseFixture;
+use App\Tests\DataFixtures\BaseFixture;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Service\AccountService;
 
 abstract class BaseApiTestCase extends ApiTestCase
 {
@@ -42,7 +44,12 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected function loadFixtures(): void
     {
-        $fixture = static::getContainer()->get(BaseFixture::class);
+        $container = static::getContainer();
+
+        $passwordHasher = $container->get(UserPasswordHasherInterface::class);
+        $accountService = $container->get(AccountService::class);
+
+        $fixture = new BaseFixture($passwordHasher, $accountService);
 
         $loader = new Loader();
         $loader->addFixture($fixture);
