@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Tests\DataFixtures;
 
 use App\Entity\Account;
 use App\Entity\Child;
