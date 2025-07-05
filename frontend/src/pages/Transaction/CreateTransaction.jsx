@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar.jsx";
 import { useAppContext } from "../../context/AppContext.jsx";
+import { getLocalDateString } from "../../utils/utils";
 
 export default function CreateTransactionPage() {
     const { householdId, childId, accountId } = useParams();
@@ -10,7 +11,7 @@ export default function CreateTransactionPage() {
     const [transactionType, setTransactionType] = useState("purchase");
     const [shortDescription, setShortDescription] = useState("");
     const [transactionDate, setTransactionDate] = useState(
-        new Date().toISOString().split("T")[0],
+        getLocalDateString()
     );
     const [comment, setComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +22,7 @@ export default function CreateTransactionPage() {
         const isDirty =
             amount !== "" ||
             shortDescription !== "" ||
-            transactionDate !== new Date().toISOString().split("T")[0] ||
+            transactionDate !== getLocalDateString() ||
             comment !== "";
         setIsFormDirty(isDirty);
     }, [amount, shortDescription, transactionDate, comment]);
