@@ -3,3 +3,5 @@ backend/bin/phpunit
 backend/compose.override.yaml
 data
 *~
+.editorconfig
+/backend/config/reference.php
