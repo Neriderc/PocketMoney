@@ -71,7 +71,7 @@ export default function CreateTransactionPage() {
         );
     };
 
-    function updateAmount(value, type = transactionType) {
+    function updateAmountSign(value, type = transactionType) {
         let amount = Math.abs(parseFloat(value) || 0);
         if (type === "purchase") {
             amount *= -1;
@@ -82,7 +82,7 @@ export default function CreateTransactionPage() {
     function handleTransactionTypeChange(value) {
         setTransactionType(value);
         // Make sure amount is positive/negative based on type selection
-        updateAmount(document.getElementById("amount").value, value);
+        updateAmountSign(document.getElementById("amount").value, value);
     }
 
     return (
@@ -134,7 +134,10 @@ export default function CreateTransactionPage() {
                                     id="amount"
                                     value={amount}
                                     onChange={(e) =>
-                                        updateAmount(e.target.value)
+                                        setAmount(e.target.value)
+                                    }
+                                    onBlur={(e) => 
+                                        updateAmountSign(e.target.value)
                                     }
                                     required
                                 />
