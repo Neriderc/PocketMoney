@@ -1,7 +1,7 @@
 # PocketMoney
 PocketMoney is a self-hosted website for managing your kids (or your own) pocket money. You can create children, add accounts to each child (E.g. Spending, Saving, and Charity) and have money automatically allocated to their accounts.
 
-![screen shot showing the application, with two children listed as Fred and Mary. Fred has one account "Spending" with $-11.01 in it, Mary has three accounts. Spending has $12 in it and Savings and Charity have $0](screenshot.png) ![screen shot showing the application, showing a "Spending" account, with a balance of $-11.01, created and last updated dates, a "Back to child" button, an "Edit account" button an "Add transation" button, and a list of transactions currently showing one transaction of $-11.01 to buy a pony](screenshot2.png)
+![screen shots showing the application. The first with two children listed as Fred and Mary. Fred has one account "Spending" with $-11.01 in it, Mary has three accounts. Spending has $12 in it and Savings and Charity have $0. The second screen shot shows a "Spending" account, with a balance of $-11.01, created and last updated dates, a "Back to child" button, an "Edit account" button an "Add transation" button, and a list of transactions currently showing one transaction of $-11.01 to buy a pony](screenshot.png)
 
 ## Install
 
