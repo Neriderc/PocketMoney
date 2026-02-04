@@ -52,6 +52,6 @@ class AccountService
     public function addTransactionToAccount($accountId, $data): Transaction
     {
         $account = $this->accountRepository->find($accountId);
-        return $this->transactionService->createTransactionSchedule($account, $data);
+        return $this->transactionService->createTransaction($account, $data);
     }
 }
