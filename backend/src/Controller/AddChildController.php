@@ -56,7 +56,10 @@ class AddChildController extends AbstractController
         }
 
         $childName = $data['name'];
-        $dateOfBirth = $data['dateOfBirth'] ?? null;
+        $dateOfBirth = null;
+        if (!empty($data['dateOfBirth'])) {
+            $dateOfBirth = new \DateTimeImmutable($data['dateOfBirth']);
+        }
         try {
             $child = $this->householdService->addChildToHousehold($householdId, $childName);
             if ($dateOfBirth) {

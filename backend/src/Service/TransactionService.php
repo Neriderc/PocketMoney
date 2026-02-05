@@ -21,7 +21,7 @@ class TransactionService
         $this->entityManager = $entityManager;
     }
 
-    public function createTransactionSchedule(Account $account, array $data): Transaction
+    public function createTransaction(Account $account, array $data): Transaction
     {
         $transaction = new Transaction();
         $transaction->setAmount($data["amount"]);
